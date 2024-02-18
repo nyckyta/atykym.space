@@ -1,0 +1,21 @@
+.under-construction-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: rotation 10s infinite linear;
+}
+
+.under-construction-block > img {
+    width: 50%;
+}
+
+@keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+  
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  
