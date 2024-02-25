@@ -4,11 +4,16 @@ import (
 	"net/http"
 	"log"
 	"time"
+	"os"
 )
 
 func main() {
+	port, isPresent := os.LookupEnv("PORT")
+	if !isPresent {
+		panic("PORT env must be present")
+	}
 	s := &http.Server{
-		Addr:           "127.0.0.1:8080",
+		Addr:           ":" + port,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
