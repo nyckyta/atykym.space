@@ -13,5 +13,5 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     - name: Build the Docker image
-      run: ls -la && go mod download && CGO_ENABLED=0 GOOS=linux go build -o /atykym.space && tar -c -a -f /atykym.space.tar.gz /atykym.space ./static/*
+      run: ls -la && go mod download && CGO_ENABLED=0 GOOS=linux go build -buildvcs=false -o /atykym.space && tar -c -a -f /atykym.space.tar.gz /atykym.space ./static/*
   
