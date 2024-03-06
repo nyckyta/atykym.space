@@ -12,6 +12,11 @@ jobs:
     container: golang:1.22
     steps:
     - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: ls -la && go mod download && CGO_ENABLED=0 GOOS=linux go build -buildvcs=false -o /atykym.space && tar -c -a -f /atykym.space.tar.gz /atykym.space ./static/*
-  
+    - name: Build the binary
+      run: go mod download && CGO_ENABLED=0 GOOS=linux go build -buildvcs=false -o atykym.space
+  package:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - name: Package the app
+      run: PORT=8080 docker build -t atykym.space:latest .
