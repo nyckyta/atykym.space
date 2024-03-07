@@ -1,0 +1,17 @@
+name: Application CI/CD
+
+on:
+   push:
+     branches: [ "master" ]
+
+jobs:
+  # build the binary
+  build:
+    uses: ./.github/workflows/build.yml
+  # build the docker image
+  package:
+    permissions:
+      contents: read
+      packages: write
+    needs: build
+    uses: ./.github/workflows/package.yml
