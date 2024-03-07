@@ -1,0 +1,25 @@
+name: Pull request CI
+
+on:
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  # build the binary
+  build:
+    steps:
+    - uses: nyckyta/atykym.space/.github/workflows/build.yml@master
+    - uses: actions/upload-artifact@v4
+      with:
+        path: atykym.space
+        retention-days: 1
+        overwrite: true
+
+  # build the docker image
+  package:
+    needs: build
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        path: atykym.space
+    - uses: nyckyta/atykym.space/.github/workflows/package.yml@master

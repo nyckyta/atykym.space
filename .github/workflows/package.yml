@@ -1,0 +1,13 @@
+name: Application CI/CD
+
+jobs:
+  # build the docker image
+  package:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v4
+      with:
+        path: atykym.space
+    - name: Package the app
+      run: PORT=8080 docker build -t atykym.space:latest .

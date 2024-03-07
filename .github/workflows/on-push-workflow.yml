@@ -1,0 +1,27 @@
+name: Application CI/CD
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+    uses: nyckyta/atykym.space/.github/workflows/on-pull-request-workflow@master
+
+  package:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/download-artifact@v4
+      with:
+        path: atykym.space
+    - name: Package the app
+      run: PORT=8080 docker build -t atykym.space:latest .
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: package
+    steps:
+    - run: echo "BRRRRRRR..."
