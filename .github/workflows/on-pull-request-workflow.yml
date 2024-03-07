@@ -1,0 +1,14 @@
+name: Pull request CI
+
+on:
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  # build the binary
+  build:
+    uses: ./.github/workflows/build.yml
+  # build the docker image
+  package:
+    needs: build
+    uses: ./.github/workflows/package.yml
