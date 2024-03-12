@@ -6,5 +6,6 @@ COPY atykym.space /app/app
 ADD static /app/static
 RUN chown -R app:app /app
 WORKDIR /app
+RUN ["chmod", "+x", "./app"]
 USER app
 ENTRYPOINT ["/app/app"]
