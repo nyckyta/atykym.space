@@ -1,10 +1,11 @@
 package main
 
 import (
-	"net/http"
+	"fmt"
 	"log"
-	"time"
+	"net/http"
 	"os"
+	"time"
 )
 
 func main() {
@@ -19,6 +20,11 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
+	healthHandler := func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "OK")
+	}
+
 	http.Handle("/", http.FileServer(http.Dir("./static")))
+	http.HandleFunc("/health", healthHandler)
 	log.Fatal(s.ListenAndServe())
 }
