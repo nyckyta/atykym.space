@@ -1,0 +1,25 @@
+name: Deploy workflow
+
+on:
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: SSH and copy compose file
+      shell: bash
+      run: |
+       touch ${{ vars.TMP_SECRET_FILE }}
+       chmod 600 ${{ vars.TMP_SECRET_FILE }}
+       echo '${{ secrets.PRIVATE_SSH_KEY }}' | cat >> ${{ vars.TMP_SECRET_FILE }}
+       ssh -o "StrictHostKeyChecking no" -i ${{ vars.TMP_SECRET_FILE }} ${{ vars.SERVER }} 'mkdir -p ${{ vars.DEPLOY_DST }}'
+       scp -o "StrictHostKeyChecking no" -i ${{ vars.TMP_SECRET_FILE }} ./docker-compose.yml ${{ vars.SERVER }}:${{ vars.DEPLOY_DST }}/docker-compose.yml
+       ssh -o "StrictHostKeyChecking no" -i ${{ vars.TMP_SECRET_FILE }} ${{ vars.SERVER }} 'docker login -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }} ${{ env.REGISTRY }}'
+       ssh -o "StrictHostKeyChecking no" -i ${{ vars.TMP_SECRET_FILE }} ${{ vars.SERVER }} 'docker compose -f ${{ vars.DEPLOY_DST }}/docker-compose.yml pull'
+       ssh -o "StrictHostKeyChecking no" -i ${{ vars.TMP_SECRET_FILE }} ${{ vars.SERVER }} 'docker compose -f ${{ vars.DEPLOY_DST }}/docker-compose.yml up -d'
+       rm ${{ vars.TMP_SECRET_FILE }}
