@@ -42,7 +42,7 @@
   display: inline-block;
   background-color: #606060;
   width: 0.6em;
-  height: 0.95em;
+  height: 0.85em;
   animation: blink 1s step-end infinite;
 }
   
