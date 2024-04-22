@@ -3,6 +3,7 @@
     <head>
         <link rel="stylesheet" href="css/style.css">
         <script src="js/index.js"></script>
+        <script src="js/htmx.min.js"></script>
     </head>
     <title>Home</title>
     <body class="body">
@@ -10,7 +11,17 @@
             <div class="terminal">
                 <div id="tty-main">
                     <span class="ps1 terminal-text">ubuntu@ip-1-1-1-1:~$</span>
-                    <span id="tty-input" class="tty-input terminal-text" spellcheck="false" contenteditable="true" autofocus></span>
+                    <span 
+                        id="tty-input" 
+                        class="tty-input terminal-text" 
+                        spellcheck="false" 
+                        contenteditable="true"
+                        hx-post="/enter"
+                        hx-trigger="keydown[code=='Enter']"
+                        hx-vals="javascript: cmd:htmx.find('#tty-input').textContent"
+                        hx-swap="beforeend"
+                        autofocus>
+                    </span>
                 </div>
             </div>
         </div>
