@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" href="css/style.css">
-        <script src="js/index.js"></script>
-        <script src="js/htmx.min.js"></script>
+        <link rel="stylesheet" href="/static/css/style.css">
+        <script src="/static/js/index.js"></script>
+        <script src="/static/js/htmx.min.js"></script>
     </head>
     <title>Home</title>
     <body class="body">
         <div class="main">
             <div class="terminal">
                 <div id="tty-main">
-                    <span class="ps1 terminal-text">ubuntu@ip-1-1-1-1:~$</span>
+                    <span class="ps1 terminal-text">{{.}}@atykym.space:~$</span>
                     <span 
                         id="tty-input" 
                         class="tty-input terminal-text" 
@@ -18,7 +18,7 @@
                         contenteditable="true"
                         hx-post="/enter"
                         hx-trigger="keydown[code=='Enter']"
-                        hx-vals="javascript: cmd:htmx.find('#tty-input').textContent"
+                        hx-vals="js: cmd:htmx.find('#tty-input').textContent"
                         hx-swap="beforeend"
                         autofocus>
                     </span>

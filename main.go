@@ -2,26 +2,74 @@ package main
 
 import (
 	"fmt"
+	"html/template"
 	"log"
-	"io"
 	"net/http"
 	"os"
+	"strings"
 	"time"
+
+	"atykym.space/handlers"
 )
 
-func logReq(w http.ResponseWriter, r *http.Request) {
-	b, e := io.ReadAll(r.Body)
-	if e != nil {
-		log.Printf("[WARN] Failed to handle req %e", e)
-		w.WriteHeader(400)
-		// TODO: inject html
-		w.Write([]byte("Segmentation fault!!!"))
-		return
+const INTERNAL_ERROR_RESPONSE string = `<div class="terminal">Segmenation fault!!! Please, let me know when it happens.</div>`
+
+
+func toCommand(input string) handlers.CommandRunner {
+	tokens := strings.Fields(input)
+	var cmd string
+	var params []string
+
+	if (len(tokens) > 1) {
+		cmd = tokens[0]
+		params = tokens[1:]
 	}
 
-	log.Printf("Body %s", string(b))
+	if (len(tokens) > 0) {
+		cmd = tokens[0]
+		params = []string{}
+	}
+
+	return handlers.Cmd{
+		Cmd: cmd,
+		Params: params,
+		User: "",
+	}
+}
+
+func handleIndex(w http.ResponseWriter, r *http.Request) {
+	t, e := template.ParseFiles("./templates/index-template.html")
+	if e != nil {
+		log.Printf("[WARN] Failed to handle req %e", e)
+		w.WriteHeader(500)
+		w.Write([]byte(INTERNAL_ERROR_RESPONSE))
+		return
+	}
 	w.WriteHeader(200)
-	w.Write([]byte(`<div class="terminal">Unknown command</div>`))
+	t.Execute(w, "anon")
+}
+
+func handleEnterHit(w http.ResponseWriter, r *http.Request) {
+	e := r.ParseForm()
+	if e != nil {
+		log.Printf("[WARN] Failed to handle req %e", e)
+		w.WriteHeader(500)
+		w.Write([]byte(INTERNAL_ERROR_RESPONSE))
+		return
+	}
+	cmdVal := r.FormValue("cmd")
+	cmd := toCommand(cmdVal)
+	output := cmd.Run()
+	w.WriteHeader(200)
+	w.Write([]byte(output))
+}
+
+func handleHealth(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "OK")
+}
+
+func handleFavicon(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(404)
 }
 
 func main() {
@@ -36,12 +84,10 @@ func main() {
 		MaxHeaderBytes: 1 << 20,
 	}
 
-	healthHandler := func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "OK")
-	}
-
-	http.Handle("/", http.FileServer(http.Dir("./static")))
-	http.Handle("/enter",  http.HandlerFunc(logReq))
-	http.HandleFunc("/health", healthHandler)
+	http.Handle("/static/*", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
+	http.HandleFunc("/enter", handleEnterHit)
+	http.HandleFunc("/favicon.ico", handleFavicon)
+	http.HandleFunc("/health", handleHealth)
+	http.HandleFunc("/", handleIndex)
 	log.Fatal(s.ListenAndServe())
 }
