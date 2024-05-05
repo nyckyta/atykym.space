@@ -8,7 +8,6 @@ import (
 	"os"
 	"strings"
 	"time"
-
 	"atykym.space/handlers"
 )
 
@@ -17,23 +16,23 @@ const INTERNAL_ERROR_RESPONSE string = `<div class="terminal">Segmenation fault!
 
 func toCommand(input string) handlers.CommandRunner {
 	tokens := strings.Fields(input)
-	var cmd string
-	var params []string
-
 	if (len(tokens) > 1) {
-		cmd = tokens[0]
-		params = tokens[1:]
+		return handlers.Cmd{
+			Cmd: tokens[0],
+			Params: tokens[1:],
+		}
 	}
 
-	if (len(tokens) > 0) {
-		cmd = tokens[0]
-		params = []string{}
+	if (len(tokens) == 1) {
+		return handlers.Cmd{
+			Cmd: tokens[0],
+			Params: []string{},
+		}
 	}
 
 	return handlers.Cmd{
-		Cmd: cmd,
-		Params: params,
-		User: "",
+		Cmd: "",
+		Params: []string{},
 	}
 }
 
@@ -59,6 +58,7 @@ func handleEnterHit(w http.ResponseWriter, r *http.Request) {
 	}
 	cmdVal := r.FormValue("cmd")
 	cmd := toCommand(cmdVal)
+	log.Printf("%v", cmd)
 	output := cmd.Run()
 	w.WriteHeader(200)
 	w.Write([]byte(output))
