@@ -4,7 +4,7 @@
   width: 100%;
   word-break: break-all;
   font-family: monospace;
-  
+  font-size: large;
 }
 
 .main {
@@ -24,9 +24,7 @@
 
 .terminal-text { 
   position: relative;
-  font-size: large;
 }
-
 
 .tty-input {
   resize: none;
@@ -38,14 +36,13 @@
   display: inline;
 }
 
-#tty-input::after {
-  content: "";
+#carret {
   position: relative;
-  top: 0.3em;
+  width: fit-content;
   display: inline-block;
+  height: 1lh;
+  color: transparent;
   background-color: #606060;
-  width: 0.70em;
-  height: 1.5em;
   animation: blink 1s step-end infinite;
 }
   
