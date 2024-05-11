@@ -11,40 +11,48 @@ const handleTerminalSwitch = event => {
     currentInput.parentElement.insertBefore(ttyClone, currentInput)
     currentInput.children[1].textContent = ''
 
-        // remove carret
+    // remove carret
     let carret = document.getElementById('carret')
     carret.innerHTML = ''
     carret.setAttribute('id', '')
 }
 
+const calculateAndChangeCarretPosition = selection => {
+    let lengthOfInput = document.getElementById('tty-input').textContent.length
+    let startOffset = selection.getRangeAt(0).startOffset
+    let endOffset = selection.getRangeAt(0).endOffset
+    if (startOffset !== endOffset) {
+        return
+    }
+
+    let shift = lengthOfInput - (startOffset > lengthOfInput ? lengthOfInput : startOffset)
+    let carret = document.getElementById('carret')
+    let carretStyles = carret.style
+    let carretWidth = carret.getBoundingClientRect().width
+    carretStyles.right = `${shift * carretWidth}px`
+}
+
 window.addEventListener('load', () => {
+    // makes focusing on the input simpler
     window.addEventListener('click', () => {
         document.getElementById('tty-input').focus()
     })
 
+    // handles move of the carret without input change
     document.addEventListener("selectionchange", event => {
         let selection = window.getSelection()
         let isTextselectionRelatedToInput = selection.focusNode.parentElement.isSameNode(document.getElementById('tty-input'))
         if (isTextselectionRelatedToInput) {
-            let lengthOfInput = document.getElementById('tty-input').textContent.length
-            let startOffset = selection.getRangeAt(0).startOffset
-            let endOffset = selection.getRangeAt(0).endOffset
-            if (startOffset !== endOffset) {
-                return
-            }
-
-            let shift = lengthOfInput - (startOffset > lengthOfInput ? lengthOfInput : startOffset)
-            let carret = document.getElementById('carret')
-            let carretStyles = carret.style
-            let carretWidth = carret.getBoundingClientRect().width
-            carretStyles.right = `${shift * carretWidth}px`
+            calculateAndChangeCarretPosition(selection)
         }
     })
 
+    // handles redraw of the terminal after response from the server is received
     document.getElementById('tty-input').addEventListener('htmx:afterRequest', event => {
         handleTerminalSwitch(event)
     })
 
+    // handles UI behavior when enter is clicked and input is processed
     document.getElementById('tty-input').addEventListener('keydown', event => {
         if (event.code === 'Enter') {
             event.preventDefault()
@@ -52,20 +60,9 @@ window.addEventListener('load', () => {
         }
     })
 
+    // handles move of the carret when text is changed
     document.getElementById('tty-input').addEventListener('input', e => {
-        let range = window.getSelection().getRangeAt(0)
-        // let editable = document.getElementById('tty-input')
-        // let textNode = editable.firstChild
-        // if (textNode === undefined || textNode === null) {
-        //     return
-        // }
-        // let range = document.createRange()
-        // let sel = window.getSelection()
-        // let contentLen = editable.textContent.length
-        // range.setStart(textNode, contentLen === 0 ? 0 : contentLen)
-        // range.collapse(true)
-    
-        // sel.removeAllRanges()
-        // sel.addRange(range)
+        let selection = window.getSelection()
+        calculateAndChangeCarretPosition(selection)
     })
 })
