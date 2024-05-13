@@ -1,0 +1,8 @@
+{
+    "server_address": "localhost:8081",
+    "content_dir": "./anon/home",
+    "server_read_timeout": 10,
+    "server_write_timeout": 10,
+    "server_max_header_bytes": 2048,
+    "server_max_body_bytes": 8192
+}

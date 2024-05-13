@@ -1,4 +1,4 @@
-package handlers
+package cmd
 
 import (
 	"bufio"
@@ -49,7 +49,6 @@ func handleCat(cmd Cmd) string {
 	fs := os.DirFS("anon/home")
 
 	path := path.Clean(params[0])
-	//log.Printf("Path: %v", normalizedPath)
 
 	f, err := fs.Open(path)
 	if err != nil {
@@ -88,4 +87,29 @@ func executeTemplateAgainstAny(pathToTemplate string, vars any) string {
 		panic("Failed to execute template")
 	}
 	return b.String()
+}
+
+/*
+	Converts string to Command that is able to run.
+*/
+func ToCommand(input string) CommandRunner {
+	tokens := strings.Fields(input)
+	if (len(tokens) > 1) {
+		return Cmd{
+			Cmd: tokens[0],
+			Params: tokens[1:],
+		}
+	}
+
+	if (len(tokens) == 1) {
+		return Cmd{
+			Cmd: tokens[0],
+			Params: []string{},
+		}
+	}
+
+	return Cmd{
+		Cmd: "",
+		Params: []string{},
+	}
 }
