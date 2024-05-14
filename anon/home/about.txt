@@ -1,1 +1,6 @@
-To be continued...
+My name is Mykyta. I am software engineer.
+This is my website and side project, in my professional life I code in Java mostly.
+
+The project is built with 0 dependecies except HTMX on the frontend side.
+
+Link to the github will be provided soon...
