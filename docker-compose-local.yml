@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  atykym.space:
+    restart: unless-stopped
+    container_name: site
+    build: .
+    platform: linux/amd64
+    networks:
+      - site_network
+  
+  caddy:
+    image: caddy:latest
+    restart: unless-stopped
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - $PWD/Caddyfile-local:/etc/caddy/Caddyfile
+    networks:
+      - site_network
+
+networks:
+  site_network:
+    

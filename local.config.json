@@ -1,5 +1,5 @@
 {
-    "server_address": "localhost:8081",
+    "server_address": ":8081",
     "content_dir": "./anon/home",
     "server_read_timeout": 10,
     "server_write_timeout": 10,
