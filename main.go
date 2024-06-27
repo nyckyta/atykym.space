@@ -16,5 +16,4 @@ func main() {
 	appConfig := config.ReadConfig(configPath)
 	var app app.App = app.App{Config: appConfig}
 	app.Start()
-
 }
