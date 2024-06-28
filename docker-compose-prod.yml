@@ -18,7 +18,8 @@ services:
       - "443:443"
       - "443:443/udp"
     volumes:
-      - "$WORKDIR/Caddyfile-prod:/etc/caddy/Caddyfile"
+      - "$WORKDIR/Caddyfile:/etc/caddy/Caddyfile"
+      - "$WORKDIR/caddy_data:/data"
     networks:
       - site_network
 
