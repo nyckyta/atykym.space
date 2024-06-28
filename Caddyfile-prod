@@ -1,0 +1,7 @@
+atykym.space {
+	tls {
+		key_type rsa4096
+		ca https://acme-staging-v02.api.letsencrypt.org/directory
+	}
+	reverse_proxy site:8081
+}
