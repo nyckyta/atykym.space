@@ -11,6 +11,7 @@ import (
 
 const ERROR_TEMPLATE_PATH = "templates/error.html"
 const STRING_OUTPUT_PATH = "templates/string-output.html"
+const HELP_OUTPUT_PATH = "templates/help.html"
 
 type Cmd struct {
 	Cmd string
@@ -29,6 +30,7 @@ type CommandRunner interface {
 func (cmd Cmd) Run() string {
 	switch(cmd.Cmd) {
 	case "cat": return handleCat(cmd)
+	case "help": return handleHelp()
 	case "": return ""
 	default: return handleUnknown(cmd)
 	}
@@ -37,6 +39,10 @@ func (cmd Cmd) Run() string {
 func handleUnknown(cmd Cmd) string {
 	err := CmdErr{cmd.Cmd, "unknown command."}
 	return executeTemplateAgainstAny(ERROR_TEMPLATE_PATH, err)
+}
+
+func handleHelp() string {
+	return executeTemplateAgainstAny(HELP_OUTPUT_PATH, nil)
 }
 
 func handleCat(cmd Cmd) string {
