@@ -10,7 +10,7 @@ import (
 )
 
 const ERROR_TEMPLATE_PATH = "templates/error.html"
-const STRING_OUTPUT_PATH = "templates/string-output.html"
+const CAT_OUTPUT_PATH = "templates/cat-output.html"
 const HELP_OUTPUT_PATH = "templates/help.html"
 
 type Cmd struct {
@@ -76,7 +76,7 @@ func handleCat(cmd Cmd) string {
 		return executeTemplateAgainstAny(ERROR_TEMPLATE_PATH, cmdErr)
 	}
 
-	return executeTemplateAgainstAny(STRING_OUTPUT_PATH, string(fileContent))
+	return executeTemplateAgainstAny(CAT_OUTPUT_PATH, string(fileContent))
 }
 
 
