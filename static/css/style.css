@@ -1,54 +1,9 @@
-.body {
-  background-color: black;
-  color: white;
-  width: 100%;
-  word-break: break-all;
-  font-family: monospace;
-  font-size: large;
-}
-
-.main {
-  display: flex;
-  flex-direction: column;
-  padding-left: 10%;
-  width: 70%;
-}
-
-.terminal {
-  /* Bascially this 'caret-color' has to be specified for .tty-input,
-   but for some reason it is ignored when text is emepty, so to completely
-   hide caret, it should be specified in parent block.
-   */
-   caret-color: transparent;
-}
-
-.terminal-text { 
-  position: relative;
-}
-
-.tty-input {
-  resize: none;
-  display: inline;
-  outline: none;
-}
-
-.ps1 {
-  display: inline;
-}
-
 #carret {
-  position: relative;
-  width: fit-content;
-  display: inline-block;
-  height: 1lh;
-  color: transparent;
-  background-color: #606060;
   animation: blink 1s step-end infinite;
 }
-  
+
 @keyframes blink {
-  0% { opacity: 1.0; }
-  50% { opacity: 0.0; }
+  0%   { opacity: 1.0; }
+  50%  { opacity: 0.0; }
   100% { opacity: 1.0; }
 }
-

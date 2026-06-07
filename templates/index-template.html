@@ -1,44 +1,34 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="/static/css/style.css">
+        <script src="https://cdn.tailwindcss.com"></script>
         <script src="/static/js/index.js"></script>
         <script src="/static/js/htmx.min.js"></script>
     </head>
     <title>Home</title>
-    <body class="body">
-        <div class="main">
-            <div class="terminal">
-                <pre>
-                    Welcome to:
-                            __             __                                                                        
-                            /\ \__         /\ \                                                                       
-                        __  \ \ ,_\  __  __\ \ \/'\   __  __    ___ ___         ____  _____      __      ___     __   
-                      /'__`\ \ \ \/ /\ \/\ \\ \ , <  /\ \/\ \ /' __` __`\      /',__\/\ '__`\  /'__`\   /'___\ /'__`\ 
-                     /\ \L\.\_\ \ \_\ \ \_\ \\ \ \\`\\ \ \_\ \/\ \/\ \/\ \  __/\__, `\ \ \L\ \/\ \L\.\_/\ \__//\  __/ 
-                     \ \__/.\_\\ \__\\/`____ \\ \_\ \_\/`____ \ \_\ \_\ \_\/\_\/\____/\ \ ,__/\ \__/.\_\ \____\ \____\
-                      \/__/\/_/ \/__/ `/___/> \\/_/\/_/`/___/> \/_/\/_/\/_/\/_/\/___/  \ \ \/  \/__/\/_/\/____/\/____/
-                                         /\___/           /\___/                        \ \_\                         
-                                         \/__/            \/__/                          \/_/                         
-                    
-                    
-                    Enter 'help' command to see what you can do
-                </pre>
+    <body class="bg-black text-white font-mono text-base sm:text-lg break-all min-h-screen">
+        <div class="flex flex-col px-4 sm:px-8 md:pl-[10%] w-full md:w-[100%] lg:w-[100%]">
+            <div class="[caret-color:transparent]">
+                <pre class="overflow-x-auto text-[0.5rem] sm:text-xs lg:text-sm leading-tight">Welcome to:</pre>
+                <img src="/static/img/white_atykym_space.png" alt="atykym.space" class="w-[80%] h-auto my-2">
+                <pre class="overflow-x-auto text-[0.5rem] sm:text-xs lg:text-sm leading-tight">Enter 'help' command to see what you can do</pre>
                 <div id="tty-main">
-                    <span class="ps1 terminal-text">{{.}}@atykym.space:~$</span>
-                    <span 
-                        id="tty-input" 
-                        class="tty-input terminal-text" 
-                        spellcheck="false" 
+                    <span class="relative inline">{{.}}@atykym.space:~$</span>
+                    <span
+                        id="tty-input"
+                        class="inline outline-none resize-none relative"
+                        spellcheck="false"
                         contenteditable="true"
                         hx-post="/enter"
                         hx-trigger="keydown[code=='Enter']"
                         hx-vals="js: cmd:htmx.find('#tty-input').textContent"
                         hx-swap="beforeend"
                         autofocus>
-                </span><div id="carret">*</div>
+                </span><div id="carret" class="relative inline-block w-fit h-[1lh] text-transparent bg-[#606060]">*</div>
                 </div>
             </div>
         </div>
-    </body> 
+    </body>
 </html>
