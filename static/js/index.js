@@ -2,6 +2,7 @@ const handleTerminalSwitch = event => {
     let currentInput = document.getElementById('tty-main')
     let ttyClone = currentInput.cloneNode(true)
     ttyClone.setAttribute('id', '')
+    ttyClone.classList.add('tty-history')
 
     let editableArea = ttyClone.children[1]
     editableArea.setAttribute('contenteditable', false)
@@ -15,6 +16,21 @@ const handleTerminalSwitch = event => {
     let carret = document.getElementById('carret')
     carret.innerHTML = ''
     carret.setAttribute('id', '')
+}
+
+const clearTerminal = () => {
+    document.querySelectorAll('.tty-history').forEach(history => history.remove())
+
+    // deferred so it runs after the keydown handler that appends the <br> on Enter
+    setTimeout(() => {
+        let input = document.getElementById('tty-input')
+        input.textContent = ''
+
+        let carret = document.getElementById('carret')
+        carret.style.right = '0px'
+
+        input.focus()
+    }, 0)
 }
 
 const calculateAndChangeCarretPosition = selection => {
@@ -50,6 +66,15 @@ window.addEventListener('load', () => {
     // handles redraw of the terminal after response from the server is received
     document.getElementById('tty-input').addEventListener('htmx:afterRequest', event => {
         handleTerminalSwitch(event)
+    })
+
+    // handles 'clear' locally instead of sending it to the server
+    document.getElementById('tty-input').addEventListener('htmx:confirm', event => {
+        let cmd = event.target.textContent.trim()
+        if (cmd === 'clear') {
+            event.preventDefault()
+            clearTerminal()
+        }
     })
 
     // handles UI behavior when enter is clicked and input is processed
